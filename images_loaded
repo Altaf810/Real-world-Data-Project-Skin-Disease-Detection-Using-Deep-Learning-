@@ -1,0 +1,32 @@
+import os
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import pandas as pd
+
+# Define dataset path
+data_dir = r"D:\Skin diease detection"
+
+# Image folders
+img_dir1 = os.path.join(data_dir, "HAM10000_images_part_1")
+img_dir2 = os.path.join(data_dir, "HAM10000_images_part_2")
+
+# Load metadata CSV
+metadata_path = os.path.join(data_dir, "HAM10000_metadata.csv")  # change if xlsx
+df = pd.read_csv(metadata_path)
+
+# Pick one random image from metadata
+sample_row = df.sample(1).iloc[0]
+image_id = sample_row['image_id'] + ".jpg"
+
+# Find image path (check both folders)
+if os.path.exists(os.path.join(img_dir1, image_id)):
+    img_path = os.path.join(img_dir1, image_id)
+else:
+    img_path = os.path.join(img_dir2, image_id)
+
+# Load and show
+img = mpimg.imread(img_path)
+plt.imshow(img)
+plt.title(f"Diagnosis: {sample_row['dx']} | Location: {sample_row['localization']}")
+plt.axis("off")
+plt.show()
